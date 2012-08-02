@@ -1,0 +1,13 @@
+When I upload pictures from my digital camera, the image sizes are quite 
+large.  Also, I want to keep all the original pictures in their original 
+format (not photoshopped).  So I created a little program that will simply
+create thumbnail images from a directory of images (mostly the directory 
+of images uploaded from my camera).  The thumbnail size can be set to your
+preference.  I usually use 1200x900 or 1024x768.
+
+The original images are preserved.
+
+Cheers!
+
+
+
