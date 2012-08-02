@@ -1,0 +1,4 @@
+thumbcreator
+============
+
+Create image thumbnails.
