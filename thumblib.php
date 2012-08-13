@@ -1,16 +1,16 @@
 <?php
 
-
+// Hey dude!
 function createThumbs($pathToImages, $pathToThumbs, $thumbWidth, $thumbprefix)
 {
     $dir = opendir($pathToImages);
-    if($dir == false) 
+    if($dir == false)
     {
         print "Failed to open image dir: $pathToImages \n";
         return;
     }
     $tn_dir = opendir($pathToThumbs);
-    if($tn_dir == false) 
+    if($tn_dir == false)
     {
         print "Failed to open thumbnail dir: $pathToThumbs \n";
         return;
@@ -19,7 +19,7 @@ function createThumbs($pathToImages, $pathToThumbs, $thumbWidth, $thumbprefix)
 
 
     // loop through it, looking for any/all JPG files:
-    while(false !== ($fname = readdir($dir))) 
+    while(false !== ($fname = readdir($dir)))
     {
         // parse path for the extension
         $info = pathinfo($pathToImages . $fname);
@@ -44,7 +44,7 @@ function createThumbs($pathToImages, $pathToThumbs, $thumbWidth, $thumbprefix)
             imagecopyresized($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
             // save thumbnail into a file - make thumb file name lowercase
-	    $fname = strtolower($fname);
+      $fname = strtolower($fname);
             imagejpeg($tmp_img, "{$pathToThumbs}{$thumbprefix}{$fname}", 100);
 
             echo "Created thumbnail: {$pathToThumbs}{$thumbprefix}{$fname}\n";
@@ -104,7 +104,7 @@ function createGallery($pathToImages, $pathToThumbs, $thumbprefix)
 // Call createGallery() function and pass to it as parameters the path
 // to the directory that contains images and the path to the directory
 // in which thumbnails will be placed. We are assuming that the path
-// will be a relative path working both in the filesystem, and through 
+// will be a relative path working both in the filesystem, and through
 // the web for links.
 //createGallery("upload/", "upload/thumbs/", "tn_");
 
