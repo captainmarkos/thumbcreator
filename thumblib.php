@@ -1,35 +1,36 @@
 <?php
 
-// Hey dude!
 function createThumbs($pathToImages, $pathToThumbs, $thumbWidth, $thumbprefix)
 {
     $dir = opendir($pathToImages);
-    if($dir == false)
-    {
+    if($dir == false) {
         print "Failed to open image dir: $pathToImages \n";
-        return;
+        return false;
     }
+
+    // if we cannot open $pathToThumbs then create it and then open it.
     $tn_dir = opendir($pathToThumbs);
-    if($tn_dir == false)
-    {
-        print "Failed to open thumbnail dir: $pathToThumbs \n";
-        return;
+    if($tn_dir == false) {
+        mkdir($pathToThumbs, 775);
+        $tn_dir = opendir($pathToThumbs);
+        if(!$tn_dir) { 
+            print "Failed to create and open thumbnail dir: $pathToThumbs \n";
+            return false;
+        }
     }
     closedir($tn_dir);
 
 
     // loop through it, looking for any/all JPG files:
-    while(false !== ($fname = readdir($dir)))
-    {
+    while(false !== ($fp = readdir($dir))) {
         // parse path for the extension
-        $info = pathinfo($pathToImages . $fname);
+        $info = pathinfo($pathToImages . $fp);
 
         // continue only if this is a JPEG image
-        //if(strtolower($info['extension']) == 'jpg')
-        if(preg_match("/\.jpg$/i", $fname))
+        if(preg_match("/\.jpg$/i", $fp))
         {
             // load image and get image size
-            $img = imagecreatefromjpeg("{$pathToImages}{$fname}");
+            $img = imagecreatefromjpeg("{$pathToImages}{$fp}");
             $width = imagesx($img);
             $height = imagesy($img);
 
@@ -44,15 +45,16 @@ function createThumbs($pathToImages, $pathToThumbs, $thumbWidth, $thumbprefix)
             imagecopyresized($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
             // save thumbnail into a file - make thumb file name lowercase
-      $fname = strtolower($fname);
-            imagejpeg($tmp_img, "{$pathToThumbs}{$thumbprefix}{$fname}", 100);
+            $fp = strtolower($fp);
+            imagejpeg($tmp_img, "{$pathToThumbs}{$thumbprefix}{$fp}", 100);
 
-            echo "Created thumbnail: {$pathToThumbs}{$thumbprefix}{$fname}\n";
+            echo "Created thumbnail: {$pathToThumbs}{$thumbprefix}{$fp}\n";
         }
     }
     closedir($dir);
+    return true;
 }
-// Call createThumb() function and pass to it as parameters the path
+// Call createThumbs() function and pass to it as parameters the path
 // to the directory that contains images, the path to the directory
 // in which thumbnails will be placed and the thumbnail width.  We
 // are assuming that the path will be a relative path working both
@@ -70,19 +72,18 @@ function createGallery($pathToImages, $pathToThumbs, $thumbprefix)
 
     // open the directory
     $dir = opendir($pathToThumbs);
+    if(!$dir) { echo "--> createGallery() : unable to opendir($pathToThumbs)\n"; return false; }
 
     $counter = 0;
 
-    while (false !== ($fname = readdir($dir)))
-    {
-        $info = pathinfo($pathToThumbs . $fname);
+    while (false !== ($fp = readdir($dir))) {
+        $info = pathinfo($pathToThumbs . $fp);
 
         // continue only if this is a JPEG image
-        if(strtolower($info['extension']) == 'jpg')
-        {
-            $realfname = preg_replace("/^{$thumbprefix}/", "", $fname);
+        if(strtolower($info['extension']) == 'jpg') {
+            $realfname = preg_replace("/^{$thumbprefix}/", "", $fp);
             $output .= "<td valign=\"middle\" align=\"center\"><a href=\"{$pathToImages}{$realfname}\">";
-            $output .= "<img src=\"{$pathToThumbs}{$fname}\" border=\"0\" />";
+            $output .= "<img src=\"{$pathToThumbs}{$fp}\" border=\"0\" />";
             $output .= "</a></td>\n";
 
             $counter += 1;
