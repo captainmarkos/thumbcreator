@@ -65,7 +65,10 @@ function createThumbs($pathToImages, $pathToThumbs, $thumbWidth, $thumbprefix)
 function createGallery($pathToImages, $pathToThumbs, $thumbprefix)
 {
     $output  = "<html>\n";
-    $output .= "<head><title>Thumbnails</title></head>\n";
+    $output .= "<head><title>Thumbnails</title>\n";
+    $output .= "<style>\n";
+    $output .= "img { width: 200px; }\n";
+    $output .= "</style></head>\n";
     $output .= "<body>\n";
     $output .= "<table cellspacing=\"0\" cellpadding=\"2\" width=\"500\">\n";
     $output .= "<tr>\n";
